@@ -5,6 +5,14 @@ metadata:
   name: manager-role
 rules:
 - apiGroups:
+  - ""
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
   - backup.javy.dev
   resources:
   - backupjobs
@@ -30,3 +38,15 @@ rules:
   - get
   - patch
   - update
+- apiGroups:
+  - batch
+  resources:
+  - jobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
