@@ -102,7 +102,7 @@ go mod init github.com/YOUR_GITHUB_USER/universal-backup-operator
 Kubebuilder is the **canonical** way to scaffold a Go Operator.
 
 ```bash
-kubebuilder init --domain example.com --repo github.com/YOUR_GITHUB_USER/universal-backup-operator
+kubebuilder init --domain javy.dev --repo github.com/javydevx/universal-backup-operator
 kubebuilder create api --group backup --version v1 --kind BackupJob --resource --controller
 ```
 
