@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-CLUSTER_NAME="universal-backup"
-CONFIG_FILE="deployments/local/kind-config.yaml"
+KIND_CLUSTER_NAME=${KIND_CLUSTER_NAME:-universal-backup}
+KIND_CONFIG_PATH=${KIND_CONFIG_PATH:-./config/local/kind-config.yaml}
 
-echo "🚀 Creating kind cluster: $CLUSTER_NAME..."
-kind create cluster --name "$CLUSTER_NAME" --config "$CONFIG_FILE"
+echo "🚀 Creating kind cluster '${KIND_CLUSTER_NAME}'..."
+kind create cluster --name "${KIND_CLUSTER_NAME}" --config "${KIND_CONFIG_PATH}"
 
-echo "✅ Kind cluster '$CLUSTER_NAME' is ready!"
-kubectl cluster-info --context kind-$CLUSTER_NAME
+kubectl cluster-info --context kind-${KIND_CLUSTER_NAME}
+echo "✅ Kind cluster ready!"

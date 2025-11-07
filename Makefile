@@ -210,3 +210,19 @@ mv $(1) $(1)-$(3) ;\
 } ;\
 ln -sf $(1)-$(3) $(1)
 endef
+
+##@ Local Development Helpers
+
+# Kind cluster name (if you use a custom one, update here)
+KIND_CLUSTER_NAME ?= universal-backup
+
+.PHONY: run-in-kind
+run-in-kind: ## Build, load, and deploy the operator into the Kind cluster
+	$(MAKE) docker-build IMG=${IMG}
+	kind load docker-image ${IMG} --name $(KIND_CLUSTER_NAME)
+	$(MAKE) deploy IMG=${IMG}
+
+.PHONY: delete-from-kind
+delete-from-kind: ## Undeploy operator and delete kind cluster
+	$(MAKE) undeploy
+	kind delete cluster --name $(KIND_CLUSTER_NAME)

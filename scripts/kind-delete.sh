@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-set -e
+set -euo pipefail
 
-CLUSTER_NAME="universal-backup"
+# Use same cluster name variable as in Makefile / setup
+KIND_CLUSTER_NAME=${KIND_CLUSTER_NAME:-universal-backup}
 
-echo "🧹 Deleting kind cluster: $CLUSTER_NAME..."
-kind delete cluster --name "$CLUSTER_NAME"
-echo "✅ Cluster deleted."
+echo "🧹 Deleting kind cluster: $KIND_CLUSTER_NAME..."
+kind delete cluster --name "$KIND_CLUSTER_NAME"
+echo "✅ Cluster deleted!"
