@@ -1,0 +1,27 @@
+# permissions for end users to edit backupjobs.
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  labels:
+    app.kubernetes.io/name: universal-backup-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: backupjob-editor-role
+rules:
+- apiGroups:
+  - backup.javy.dev
+  resources:
+  - backupjobs
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - backup.javy.dev
+  resources:
+  - backupjobs/status
+  verbs:
+  - get

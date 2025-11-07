@@ -1,0 +1,9 @@
+apiVersion: backup.javy.dev/v1
+kind: BackupJob
+metadata:
+  labels:
+    app.kubernetes.io/name: universal-backup-operator
+    app.kubernetes.io/managed-by: kustomize
+  name: backupjob-sample
+spec:
+  # TODO(user): Add fields here
