@@ -8,9 +8,9 @@ A Kubernetes Operator written in Go that provides a **declarative way** to defin
 
 The `universal-backup-operator` introduces a custom resource called `BackupJob` that allows cluster users to declare:
 
-- **what** to back up (`target`)
-- **how** to back it up (`strategy`)
-- **where** to store it (`destination`)
+* **what** to back up (`target`)
+* **how** to back up (`strategy`)
+* **where** to store it (`destination`)
 
 The operator automatically schedules and executes Kubernetes `Jobs` or `CronJobs` to perform backups based on this definition.
 
@@ -43,24 +43,24 @@ spec:
 
 ## 🌐 Supported Destinations (planned)
 
-| Type | Description | Example |
-|------|--------------|----------|
-| `s3` | AWS S3, MinIO, Wasabi | `s3://mybucket/backups` |
-| `gcs` | Google Cloud Storage | `gs://mybucket/backups` |
-| `azure` | Azure Blob Storage | `az://container/path` |
-| `git` | Git-based backup repo | `git@github.com:user/backups.git` |
-| `nfs` | On-prem or local NFS mount | `nfs://server/path` |
-| `local` | PersistentVolumeClaim | `pvc://my-backups` |
-| `custom` | Run arbitrary backup command | - |
+| Type     | Description                  | Example                           |
+| -------- | ---------------------------- | --------------------------------- |
+| `s3`     | AWS S3, MinIO, Wasabi        | `s3://mybucket/backups`           |
+| `gcs`    | Google Cloud Storage         | `gs://mybucket/backups`           |
+| `azure`  | Azure Blob Storage           | `az://container/path`             |
+| `git`    | Git-based backup repo        | `git@github.com:user/backups.git` |
+| `nfs`    | On-prem or local NFS mount   | `nfs://server/path`               |
+| `local`  | PersistentVolumeClaim        | `pvc://my-backups`                |
+| `custom` | Run arbitrary backup command | -                                 |
 
 ---
 
 ## 🧱 Architecture
 
-- **Custom Resource** → `BackupJob` CRD defines backup specifications.  
-- **Controller** → watches for CR changes, creates `Job`/`CronJob`.  
-- **Backup Runner** → small container images implementing backup logic for each destination type.  
-- **Status updates** → operator tracks `BackupJob.status` (phase, lastRun, message).
+* **Custom Resource** → `BackupJob` CRD defines backup specifications
+* **Controller** → watches for CR changes, creates `Job`/`CronJob`
+* **Backup Runner** → small container images implementing backup logic for each destination type
+* **Status updates** → operator tracks `BackupJob.status` (phase, lastRun, message)
 
 ---
 
@@ -68,38 +68,24 @@ spec:
 
 Before development or deployment:
 
-- Go **1.22.5+**
-- [kubectl](https://kubernetes.io/docs/tasks/tools/)
-- [Docker](https://www.docker.com/)
-- [kind](https://kind.sigs.k8s.io/) or another Kubernetes cluster
-- [kubebuilder](https://book.kubebuilder.io/quick-start.html)
+* Go **1.22.5+**
+* [kubectl](https://kubernetes.io/docs/tasks/tools/)
+* [Docker](https://www.docker.com/)
+* [kind](https://kind.sigs.k8s.io/) or another Kubernetes cluster
+* [kubebuilder](https://book.kubebuilder.io/quick-start.html)
 
 ---
 
 ## ⚙️ Development Setup
 
-### 1️⃣ Clone or Create the Repo
+### 1️⃣ Clone the Repo
 
 ```bash
-mkdir -p ~/code/universal-backup-operator
-cd ~/code/universal-backup-operator
-git init
-git branch -m main
+git clone https://github.com/javydevx/universal-backup-operator.git
+cd universal-backup-operator
 ```
 
----
-
-### 2️⃣ Initialize Go Module
-
-```bash
-go mod init github.com/YOUR_GITHUB_USER/universal-backup-operator
-```
-
----
-
-### 3️⃣ Scaffold Project Using Kubebuilder
-
-Kubebuilder is the **canonical** way to scaffold a Go Operator.
+### 2️⃣ Scaffold Project Using Kubebuilder (if not done already)
 
 ```bash
 kubebuilder init --domain javy.dev --repo github.com/javydevx/universal-backup-operator
@@ -115,25 +101,19 @@ config/                             # CRDs, RBAC, manager manifests
 main.go                             # entrypoint
 ```
 
----
-
-### 4️⃣ Generate Manifests
+### 3️⃣ Generate Manifests
 
 ```bash
 make manifests
 ```
 
----
-
-### 5️⃣ Run the Operator Locally
+### 4️⃣ Run the Operator Locally
 
 ```bash
 make run
 ```
 
----
-
-### 6️⃣ Apply CRD and Create a Sample BackupJob
+### 5️⃣ Apply CRD and Create a Sample BackupJob
 
 ```bash
 kubectl apply -f config/crd/bases/backup.example.com_backupjobs.yaml
@@ -144,41 +124,41 @@ kubectl apply -f config/samples/backup_v1_backupjob.yaml
 
 ## 🧩 Roadmap
 
-| Milestone | Status | Description |
-|------------|---------|-------------|
-| Scaffold Operator with Kubebuilder | ✅ | Basic setup |
-| Implement S3 backups | 🚧 | MVP target |
-| Add Git backup support | ⏳ | Push to Git repos |
-| Add GCS & Azure destinations | ⏳ | Cloud expansion |
-| Support PVC/NFS local backups | ⏳ | On-prem support |
-| Add Cron scheduling | ⏳ | Recurring backups |
-| Add status tracking | ⏳ | Phase, timestamps |
-| Expose `/restore` endpoint via Aggregated API Server | ⏳ | API extension feature |
+| Milestone                                            | Status | Description           |
+| ---------------------------------------------------- | ------ | --------------------- |
+| Scaffold Operator with Kubebuilder                   | ✅      | Basic setup           |
+| Implement S3 backups                                 | 🚧     | MVP target            |
+| Add Git backup support                               | ⏳      | Push to Git repos     |
+| Add GCS & Azure destinations                         | ⏳      | Cloud expansion       |
+| Support PVC/NFS local backups                        | ⏳      | On-prem support       |
+| Add Cron scheduling                                  | ⏳      | Recurring backups     |
+| Add status tracking                                  | ⏳      | Phase, timestamps     |
+| Expose `/restore` endpoint via Aggregated API Server | ⏳      | API extension feature |
 
 ---
 
 ## 🧑‍💻 Contributing
 
-Contributions are welcome!  
+Contributions are welcome!
 This project is **open-source and educational**, intended to help developers learn **Kubernetes Operator patterns** and **API extension techniques**.
 
 ---
 
 ## 📘 References
 
-| Resource | Link | Notes |
-|-----------|------|-------|
-| 🧱 Kubebuilder Book | [https://book.kubebuilder.io/](https://book.kubebuilder.io/) | Official guide for building operators |
-| ⚙️ Operator SDK | [https://sdk.operatorframework.io/docs/](https://sdk.operatorframework.io/docs/) | Alternative framework |
-| 📘 controller-runtime | [https://github.com/kubernetes-sigs/controller-runtime](https://github.com/kubernetes-sigs/controller-runtime) | Core library |
-| 🧩 CronJob tutorial | [https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html](https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html) | Good starting example |
-| 🧰 Kubernetes Code Generator | [https://github.com/kubernetes/code-generator](https://github.com/kubernetes/code-generator) | Underlying codegen tool |
+| Resource                     | Link                                                                                                                                     | Notes                                 |
+| ---------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| 🧱 Kubebuilder Book          | [https://book.kubebuilder.io/](https://book.kubebuilder.io/)                                                                             | Official guide for building operators |
+| ⚙️ Operator SDK              | [https://sdk.operatorframework.io/docs/](https://sdk.operatorframework.io/docs/)                                                         | Alternative framework                 |
+| 📘 controller-runtime        | [https://github.com/kubernetes-sigs/controller-runtime](https://github.com/kubernetes-sigs/controller-runtime)                           | Core library                          |
+| 🧩 CronJob tutorial          | [https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html](https://book.kubebuilder.io/cronjob-tutorial/cronjob-tutorial.html) | Good starting example                 |
+| 🧰 Kubernetes Code Generator | [https://github.com/kubernetes/code-generator](https://github.com/kubernetes/code-generator)                                             | Underlying codegen tool               |
 
 ---
 
 ## 📄 License
 
-This project is licensed under the **MIT License**.
+This project is licensed under the **Apache License 2.0**. See the [LICENSE](LICENSE) file for details.
 
 ---
 
@@ -186,9 +166,10 @@ This project is licensed under the **MIT License**.
 
 The goal of this project is to demonstrate:
 
-- Building a Kubernetes Operator in Go  
-- Designing flexible CRDs  
-- Extending the Kubernetes API in two ways:
+* Building a Kubernetes Operator in Go
+* Designing flexible CRDs
+* Extending the Kubernetes API in two ways:
+
   1. **CustomResourceDefinitions (CRDs)**
   2. **Aggregated API Servers**
 
@@ -196,5 +177,5 @@ By the end, you’ll have a working backup operator that can evolve into a produ
 
 ---
 
-💡 **Next Step:**  
-Run `kubebuilder init` and scaffold the project, then we’ll define the CRD (`BackupJob`) fields and reconcile logic next!
+💡 **Next Step:**
+Run `kubebuilder init` (if not already done) and scaffold the project, then define the CRD (`BackupJob`) fields and reconcile logic next.
