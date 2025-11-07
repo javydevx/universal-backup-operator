@@ -20,22 +20,42 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// EDIT THIS FILE!  THIS IS SCAFFOLDING FOR YOU TO OWN!
-// NOTE: json tags are required.  Any new fields you add must have json tags for the fields to be serialized.
+// BackupTarget defines what resource or path to back up.
+type BackupTarget struct {
+	Kind      string `json:"kind"`      // e.g. StatefulSet, Deployment, PVC
+	Name      string `json:"name"`      // resource name
+	Namespace string `json:"namespace"` // optional, defaults to current
+	Path      string `json:"path"`      // path inside container or volume
+}
+
+// BackupDestination defines where to store the backup.
+type BackupDestination struct {
+	Type      string `json:"type"`      // s3, gcs, azure, git, nfs, local, custom
+	URI       string `json:"uri"`       // e.g. s3://bucket/path or git@repo
+	SecretRef string `json:"secretRef"` // name of Secret for credentials
+}
+
+// BackupStrategy defines how the backup is performed.
+type BackupStrategy struct {
+	Type    string `json:"type"`              // dump, snapshot, copy, custom
+	Command string `json:"command,omitempty"` // optional shell command override
+}
 
 // BackupJobSpec defines the desired state of BackupJob.
 type BackupJobSpec struct {
-	// INSERT ADDITIONAL SPEC FIELDS - desired state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
-
-	// Foo is an example field of BackupJob. Edit backupjob_types.go to remove/update
-	Foo string `json:"foo,omitempty"`
+	Target      BackupTarget      `json:"target"`
+	Destination BackupDestination `json:"destination"`
+	Strategy    BackupStrategy    `json:"strategy"`
+	Schedule    string            `json:"schedule,omitempty"` // optional Cron schedule
 }
 
 // BackupJobStatus defines the observed state of BackupJob.
 type BackupJobStatus struct {
-	// INSERT ADDITIONAL STATUS FIELD - define observed state of cluster
-	// Important: Run "make" to regenerate code after modifying this file
+	Phase        string      `json:"phase,omitempty"` // Pending, Running, Succeeded, Failed
+	LastRunTime  metav1.Time `json:"lastRunTime,omitempty"`
+	Message      string      `json:"message,omitempty"`
+	LastJobName  string      `json:"lastJobName,omitempty"`
+	LastExitCode int32       `json:"lastExitCode,omitempty"`
 }
 
 // +kubebuilder:object:root=true

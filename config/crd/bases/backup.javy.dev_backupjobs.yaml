@@ -1,0 +1,110 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.4
+  name: backupjobs.backup.javy.dev
+spec:
+  group: backup.javy.dev
+  names:
+    kind: BackupJob
+    listKind: BackupJobList
+    plural: backupjobs
+    singular: backupjob
+  scope: Namespaced
+  versions:
+  - name: v1
+    schema:
+      openAPIV3Schema:
+        description: BackupJob is the Schema for the backupjobs API.
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: BackupJobSpec defines the desired state of BackupJob.
+            properties:
+              destination:
+                description: BackupDestination defines where to store the backup.
+                properties:
+                  secretRef:
+                    type: string
+                  type:
+                    type: string
+                  uri:
+                    type: string
+                required:
+                - secretRef
+                - type
+                - uri
+                type: object
+              schedule:
+                type: string
+              strategy:
+                description: BackupStrategy defines how the backup is performed.
+                properties:
+                  command:
+                    type: string
+                  type:
+                    type: string
+                required:
+                - type
+                type: object
+              target:
+                description: BackupTarget defines what resource or path to back up.
+                properties:
+                  kind:
+                    type: string
+                  name:
+                    type: string
+                  namespace:
+                    type: string
+                  path:
+                    type: string
+                required:
+                - kind
+                - name
+                - namespace
+                - path
+                type: object
+            required:
+            - destination
+            - strategy
+            - target
+            type: object
+          status:
+            description: BackupJobStatus defines the observed state of BackupJob.
+            properties:
+              lastExitCode:
+                format: int32
+                type: integer
+              lastJobName:
+                type: string
+              lastRunTime:
+                format: date-time
+                type: string
+              message:
+                type: string
+              phase:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}
