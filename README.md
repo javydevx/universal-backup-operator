@@ -19,7 +19,7 @@ The operator automatically schedules and executes Kubernetes `Jobs` or `CronJobs
 ## 📦 Example CRD Usage
 
 ```yaml
-apiVersion: backup.example.com/v1
+apiVersion: backup.javy.dev/v1
 kind: BackupJob
 metadata:
   name: postgres-daily-backup
@@ -116,7 +116,7 @@ make run
 ### 5️⃣ Apply CRD and Create a Sample BackupJob
 
 ```bash
-kubectl apply -f config/crd/bases/backup.example.com_backupjobs.yaml
+kubectl apply -f config/crd/bases/backup.javy.dev_backupjobs.yaml
 kubectl apply -f config/samples/backup_v1_backupjob.yaml
 ```
 
